@@ -16,17 +16,20 @@
 
 package com.stuntcoders.wsgwtp.client.gin;
 
-import com.stuntcoders.wsgwtp.client.application.ApplicationModule;
-import com.stuntcoders.wsgwtp.client.place.NameTokens;
+import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.annotations.DefaultPlace;
 import com.gwtplatform.mvp.client.annotations.ErrorPlace;
 import com.gwtplatform.mvp.client.annotations.UnauthorizedPlace;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
+import com.sksamuel.gwt.websockets.Websocket;
+import com.stuntcoders.wsgwtp.client.application.ApplicationModule;
+import com.stuntcoders.wsgwtp.client.place.NameTokens;
 
 /**
  * See more on setting up the PlaceManager on <a
- * href="// See more on: https://github.com/ArcBees/GWTP/wiki/PlaceManager">DefaultModule's > DefaultPlaceManager</a>
+ * href="// See more on: https://github.com/ArcBees/GWTP/wiki/PlaceManager"
+ * >DefaultModule's > DefaultPlaceManager</a>
  */
 public class ClientModule extends AbstractPresenterModule {
     @Override
@@ -34,9 +37,14 @@ public class ClientModule extends AbstractPresenterModule {
         install(new DefaultModule());
         install(new ApplicationModule());
 
+        // Providers
+        bind(Websocket.class).toProvider(WebsocketProvider.class).in(
+                Singleton.class);
+
         // DefaultPlaceManager Places
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.home);
         bindConstant().annotatedWith(ErrorPlace.class).to(NameTokens.home);
-        bindConstant().annotatedWith(UnauthorizedPlace.class).to(NameTokens.home);
+        bindConstant().annotatedWith(UnauthorizedPlace.class).to(
+                NameTokens.home);
     }
 }

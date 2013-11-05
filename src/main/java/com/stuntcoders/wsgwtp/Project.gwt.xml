@@ -11,12 +11,13 @@
 
     <!-- Other module inherits -->
     <inherits name='com.gwtplatform.dispatch.Dispatch' />
-    
+
     <inherits name='com.gwtplatform.mvp.MvpWithEntryPoint' />
+
+    <inherits name="com.sksamuel.gwt.GwtWebsockets" />
 
     <source path='client' />
     <source path='shared' />
 
-    <set-configuration-property name="gin.ginjector.modules" 
-                                value="com.stuntcoders.wsgwtp.client.gin.ClientModule"/>
+    <set-configuration-property name="gin.ginjector.modules" value="com.stuntcoders.wsgwtp.client.gin.ClientModule" />
 </module>

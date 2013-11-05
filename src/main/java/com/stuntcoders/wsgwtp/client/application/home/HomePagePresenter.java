@@ -16,18 +16,24 @@
 
 package com.stuntcoders.wsgwtp.client.application.home;
 
-import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
-import com.stuntcoders.wsgwtp.client.place.NameTokens;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
+import com.sksamuel.gwt.websockets.Websocket;
+import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
+import com.stuntcoders.wsgwtp.client.place.NameTokens;
 
-public class HomePagePresenter extends Presenter<HomePagePresenter.MyView, HomePagePresenter.MyProxy> {
-    public interface MyView extends View {
+public class HomePagePresenter extends
+        Presenter<HomePagePresenter.MyView, HomePagePresenter.MyProxy>
+        implements HomePageUiHandlers {
+    public interface MyView extends View, HasUiHandlers<HomePageUiHandlers> {
+        TextBox getMessageTextBox();
     }
 
     @ProxyStandard
@@ -35,8 +41,18 @@ public class HomePagePresenter extends Presenter<HomePagePresenter.MyView, HomeP
     public interface MyProxy extends ProxyPlace<HomePagePresenter> {
     }
 
+    Websocket socket;
+
     @Inject
-    public HomePagePresenter(EventBus eventBus, MyView view, MyProxy proxy) {
+    public HomePagePresenter(EventBus eventBus, MyView view, MyProxy proxy,
+            Websocket socket) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_SetMainContent);
+        getView().setUiHandlers(this);
+        this.socket = socket;
+    }
+
+    @Override
+    public void send() {
+        socket.send(getView().getMessageTextBox().getText());
     }
 }

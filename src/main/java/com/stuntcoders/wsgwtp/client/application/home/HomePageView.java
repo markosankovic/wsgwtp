@@ -16,17 +16,40 @@
 
 package com.stuntcoders.wsgwtp.client.application.home;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.ViewImpl;
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
-public class HomePageView extends ViewImpl implements HomePagePresenter.MyView {
+public class HomePageView extends ViewWithUiHandlers<HomePageUiHandlers>
+        implements HomePagePresenter.MyView {
+
+    @UiField
+    TextBox messageTextBox;
+
+    @UiField
+    Button sendButton;
+
     public interface Binder extends UiBinder<Widget, HomePageView> {
     }
 
     @Inject
     public HomePageView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
+    }
+
+    @UiHandler("sendButton")
+    void submitButtonOnClick(ClickEvent event) {
+        getUiHandlers().send();
+    }
+
+    @Override
+    public TextBox getMessageTextBox() {
+        return messageTextBox;
     }
 }
