@@ -1,5 +1,6 @@
 package com.stuntcoders.wsgwtp.client.gin;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -14,9 +15,12 @@ public class WebsocketProvider implements Provider<Websocket> {
 
     @Override
     public Websocket get() {
+        /**
+         * Example: ws://localhost:8080/wsgwtp/
+         */
+        String wsBaseURL = GWT.getHostPageBaseURL().replace("http://", "ws://");
 
-        Websocket socket = new Websocket(
-                "ws://localhost:8080/wsgwtp-1.0-SNAPSHOT/wsendpoint");
+        Websocket socket = new Websocket(wsBaseURL + "/wsendpoint");
 
         socket.addListener(new WebsocketListener() {
 
