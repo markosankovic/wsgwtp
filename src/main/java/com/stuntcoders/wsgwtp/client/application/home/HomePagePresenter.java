@@ -16,8 +16,11 @@
 
 package com.stuntcoders.wsgwtp.client.application.home;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.inject.Inject;
+import com.google.web.bindery.autobean.shared.AutoBean;
+import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
@@ -28,6 +31,9 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
 import com.stuntcoders.wsgwtp.client.place.NameTokens;
+import com.stuntcoders.wsgwtp.shared.ws.WsAutoBeanFactory;
+import com.stuntcoders.wsgwtp.shared.ws.WsDataExec;
+import com.stuntcoders.wsgwtp.shared.ws.WsDataType;
 
 public class HomePagePresenter extends
         Presenter<HomePagePresenter.MyView, HomePagePresenter.MyProxy>
@@ -41,6 +47,8 @@ public class HomePagePresenter extends
     public interface MyProxy extends ProxyPlace<HomePagePresenter> {
     }
 
+    WsAutoBeanFactory factory = GWT.create(WsAutoBeanFactory.class);
+
     Websocket socket;
 
     @Inject
@@ -53,6 +61,15 @@ public class HomePagePresenter extends
 
     @Override
     public void send() {
-        socket.send(getView().getMessageTextBox().getText());
+
+        AutoBean<WsDataExec> wsDataExecBean = factory.wsDataExec();
+        wsDataExecBean.as().setType(WsDataType.EXEC.name());
+        wsDataExecBean.as().setUuid("12345");
+
+        wsDataExecBean.as().setCommand("ls -la");
+
+        String json = AutoBeanCodex.encode(wsDataExecBean).getPayload();
+        
+        socket.send(json);
     }
 }

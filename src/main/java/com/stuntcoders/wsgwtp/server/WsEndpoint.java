@@ -12,7 +12,7 @@ import javax.websocket.PongMessage;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/wsendpoint")
+@ServerEndpoint(value = "/wsendpoint", configurator = WsEndpointConfigurator.class)
 public class WsEndpoint {
 
     private static Set<Session> peers = Collections
