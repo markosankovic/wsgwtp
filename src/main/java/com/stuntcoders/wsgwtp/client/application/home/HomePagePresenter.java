@@ -29,15 +29,15 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.sksamuel.gwt.websockets.Websocket;
-import com.stuntcoders.wsgwtp.client.JSONRPCFactory;
+import com.stuntcoders.wsgwtp.client.JsonRPCFactory;
 import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
-import com.stuntcoders.wsgwtp.client.event.JSONRPCResponseEvent;
-import com.stuntcoders.wsgwtp.client.event.JSONRPCResponseEvent.JSONRPCResponseHandler;
+import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
+import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent.JsonRPCResponseHandler;
 import com.stuntcoders.wsgwtp.client.place.NameTokens;
 
 public class HomePagePresenter extends
         Presenter<HomePagePresenter.MyView, HomePagePresenter.MyProxy>
-        implements HomePageUiHandlers, JSONRPCResponseHandler {
+        implements HomePageUiHandlers, JsonRPCResponseHandler {
 
     public interface MyView extends View, HasUiHandlers<HomePageUiHandlers> {
         TextBox getMessageTextBox();
@@ -59,7 +59,7 @@ public class HomePagePresenter extends
 
         this.socket = socket;
 
-        this.addRegisteredHandler(JSONRPCResponseEvent.TYPE, this);
+        this.addRegisteredHandler(JsonRPCResponseEvent.TYPE, this);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class HomePagePresenter extends
         params.put("subtrahend", new JSONNumber(23));
         params.put("minuend", new JSONNumber(42));
 
-        JSONObject jsonObject = JSONRPCFactory.request("exec", params);
+        JSONObject jsonObject = JsonRPCFactory.request("exec", params);
 
         socket.send(jsonObject.toString());
     }

@@ -16,7 +16,7 @@ import javax.websocket.server.ServerEndpoint;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
-@ServerEndpoint(value = "/wsendpoint", configurator = WsEndpointConfigurator.class)
+@ServerEndpoint(value = "/wsendpoint", configurator = WsEndpointConfigurator.class, decoders = JsonRPCRequestDecoder.class)
 public class WsEndpoint {
 
     private static Set<Session> peers = Collections
@@ -33,27 +33,15 @@ public class WsEndpoint {
     }
 
     @OnMessage
-    public void echoTextMessage(Session session, String message, boolean last) {
+    public void handleJsonRPCRequest(JsonNode jsonRequest, Session session) {
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = null;
-
-        try {
-            jsonNode = mapper.readTree(message);
-        } catch (IOException e) {
-            /**
-             * -32700 Parse error Invalid JSON was received by the server. An
-             * error occurred on the server while parsing the JSON text.
-             */
-        }
-
-        System.out.println(jsonNode);
 
         try {
             if (session.isOpen()) {
                 StringWriter writer = new StringWriter();
-                mapper.writeValue(writer, jsonNode);
-                session.getBasicRemote().sendText(writer.toString(), last);
+                mapper.writeValue(writer, jsonRequest);
+                session.getBasicRemote().sendText(writer.toString());
             }
         } catch (IOException e) {
             try {

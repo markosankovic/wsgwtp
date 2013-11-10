@@ -5,7 +5,7 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.stuntcoders.wsgwtp.shared.GUID;
 
-public class JSONRPCFactory {
+public class JsonRPCFactory {
 
     public static JSONObject request(String method, JSONValue params) {
 

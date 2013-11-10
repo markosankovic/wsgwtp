@@ -5,17 +5,17 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.json.client.JSONObject;
 
-public class JSONRPCResponseEvent extends
-        GwtEvent<JSONRPCResponseEvent.JSONRPCResponseHandler> {
+public class JsonRPCResponseEvent extends
+        GwtEvent<JsonRPCResponseEvent.JsonRPCResponseHandler> {
 
-    public static Type<JSONRPCResponseHandler> TYPE = new Type<JSONRPCResponseHandler>();
+    public static Type<JsonRPCResponseHandler> TYPE = new Type<JsonRPCResponseHandler>();
     private JSONObject jsonObject;
 
-    public interface JSONRPCResponseHandler extends EventHandler {
+    public interface JsonRPCResponseHandler extends EventHandler {
         void onJSONRPCResponse(JSONObject jsonObject);
     }
 
-    public JSONRPCResponseEvent(JSONObject jsonObject) {
+    public JsonRPCResponseEvent(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
     }
 
@@ -24,20 +24,20 @@ public class JSONRPCResponseEvent extends
     }
 
     @Override
-    protected void dispatch(JSONRPCResponseHandler handler) {
+    protected void dispatch(JsonRPCResponseHandler handler) {
         handler.onJSONRPCResponse(jsonObject);
     }
 
     @Override
-    public Type<JSONRPCResponseHandler> getAssociatedType() {
+    public Type<JsonRPCResponseHandler> getAssociatedType() {
         return TYPE;
     }
 
-    public static Type<JSONRPCResponseHandler> getType() {
+    public static Type<JsonRPCResponseHandler> getType() {
         return TYPE;
     }
 
     public static void fire(HasHandlers source, JSONObject jsonObject) {
-        source.fireEvent(new JSONRPCResponseEvent(jsonObject));
+        source.fireEvent(new JsonRPCResponseEvent(jsonObject));
     }
 }

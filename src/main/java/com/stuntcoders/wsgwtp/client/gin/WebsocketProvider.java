@@ -9,7 +9,7 @@ import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
-import com.stuntcoders.wsgwtp.client.event.JSONRPCResponseEvent;
+import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
 
 public class WebsocketProvider implements Provider<Websocket> {
 
@@ -34,7 +34,7 @@ public class WebsocketProvider implements Provider<Websocket> {
 
             @Override
             public void onMessage(String msg) {
-                eventBus.fireEvent(new JSONRPCResponseEvent(
+                eventBus.fireEvent(new JsonRPCResponseEvent(
                         (JSONObject) JSONParser.parseLenient(msg)));
             }
 
