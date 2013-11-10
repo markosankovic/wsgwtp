@@ -15,6 +15,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 
 @ServerEndpoint(value = "/wsendpoint", configurator = WsEndpointConfigurator.class, decoders = JsonRPCRequestDecoder.class)
 public class WsEndpoint {
@@ -40,7 +41,11 @@ public class WsEndpoint {
         try {
             if (session.isOpen()) {
                 StringWriter writer = new StringWriter();
-                mapper.writeValue(writer, jsonRequest);
+                ObjectNode result = JsonRPCResponseFactory.mapper.createObjectNode();
+                result.put("status", "OK");
+                ObjectNode response = JsonRPCResponseFactory.result(
+                        jsonRequest.get("id").asText(), result);
+                mapper.writeValue(writer, response);
                 session.getBasicRemote().sendText(writer.toString());
             }
         } catch (IOException e) {

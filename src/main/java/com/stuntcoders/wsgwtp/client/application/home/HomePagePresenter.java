@@ -29,7 +29,7 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.sksamuel.gwt.websockets.Websocket;
-import com.stuntcoders.wsgwtp.client.JsonRPCFactory;
+import com.stuntcoders.wsgwtp.client.JsonRPCRequestFactory;
 import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent.JsonRPCResponseHandler;
@@ -69,7 +69,7 @@ public class HomePagePresenter extends
         params.put("subtrahend", new JSONNumber(23));
         params.put("minuend", new JSONNumber(42));
 
-        JSONObject jsonObject = JsonRPCFactory.request("exec", params);
+        JSONObject jsonObject = JsonRPCRequestFactory.request("exec", params);
 
         socket.send(jsonObject.toString());
     }
