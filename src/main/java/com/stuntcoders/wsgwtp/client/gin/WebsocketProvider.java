@@ -1,12 +1,15 @@
 package com.stuntcoders.wsgwtp.client.gin;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
+import com.stuntcoders.wsgwtp.client.event.JSONRPCResponseEvent;
 
 public class WebsocketProvider implements Provider<Websocket> {
 
@@ -31,12 +34,13 @@ public class WebsocketProvider implements Provider<Websocket> {
 
             @Override
             public void onMessage(String msg) {
-                Window.alert(msg);
+                eventBus.fireEvent(new JSONRPCResponseEvent(
+                        (JSONObject) JSONParser.parseLenient(msg)));
             }
 
             @Override
             public void onOpen() {
-                Window.alert("onOpen");
+                // Window.alert("onOpen");
             }
         });
 

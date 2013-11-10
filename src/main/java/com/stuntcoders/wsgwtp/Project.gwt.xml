@@ -1,25 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <module rename-to='project'>
-    <!-- Inherit the core Web Toolkit stuff. -->
-    <inherits name='com.google.gwt.user.User' />
-    <inherits name='com.google.gwt.inject.Inject' />
+	<!-- Inherit the core Web Toolkit stuff. -->
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name='com.google.gwt.inject.Inject' />
 
-    <!-- Default css -->
-    <inherits name='com.google.gwt.user.theme.standard.Standard' />
-    <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-    <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
+	<!-- Default css -->
+	<inherits name='com.google.gwt.user.theme.standard.Standard' />
+	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
-    <!-- Other module inherits -->
-    <inherits name='com.gwtplatform.dispatch.Dispatch' />
+	<!-- Other module inherits -->
+	<inherits name='com.gwtplatform.dispatch.Dispatch' />
 
-    <inherits name='com.gwtplatform.mvp.MvpWithEntryPoint' />
+	<inherits name='com.gwtplatform.mvp.MvpWithEntryPoint' />
 
-    <inherits name="com.google.web.bindery.autobean.AutoBean" />
+	<inherits name="com.google.web.bindery.autobean.AutoBean" />
 
-    <inherits name="com.sksamuel.gwt.GwtWebsockets" />
+	<inherits name='com.google.gwt.json.JSON' />
 
-    <source path='client' />
-    <source path='shared' />
+	<inherits name="com.sksamuel.gwt.GwtWebsockets" />
 
-    <set-configuration-property name="gin.ginjector.modules" value="com.stuntcoders.wsgwtp.client.gin.ClientModule" />
+	<source path='client' />
+	<source path='shared' />
+
+	<set-configuration-property name="gin.ginjector.modules"
+		value="com.stuntcoders.wsgwtp.client.gin.ClientModule" />
 </module>

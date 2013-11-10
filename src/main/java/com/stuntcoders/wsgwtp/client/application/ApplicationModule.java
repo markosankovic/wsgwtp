@@ -16,15 +16,17 @@
 
 package com.stuntcoders.wsgwtp.client.application;
 
-import com.stuntcoders.wsgwtp.client.application.home.HomeModule;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
+import com.stuntcoders.wsgwtp.client.application.home.HomeModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
+
     @Override
     protected void configure() {
         install(new HomeModule());
 
-        bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class,
+        bindPresenter(ApplicationPresenter.class,
+                ApplicationPresenter.MyView.class, ApplicationView.class,
                 ApplicationPresenter.MyProxy.class);
     }
 }
