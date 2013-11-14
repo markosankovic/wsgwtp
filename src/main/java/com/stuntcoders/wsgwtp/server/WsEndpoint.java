@@ -1,10 +1,9 @@
 package com.stuntcoders.wsgwtp.server;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -14,47 +13,39 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
+
+import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequestDecoder;
+import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandler;
+import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandlerFactory;
 
 @ServerEndpoint(value = "/wsendpoint", configurator = WsEndpointConfigurator.class, decoders = JsonRPCRequestDecoder.class)
 public class WsEndpoint {
 
-    private static Set<Session> peers = Collections
-            .synchronizedSet(new HashSet<Session>());
+    /**
+     * Creates a thread pool that creates new threads as needed. Use for
+     * executing client commands.
+     */
+    private static final ExecutorService executorService = Executors
+            .newCachedThreadPool();
 
     @OnOpen
-    public void onOpen(Session peer) {
-        peers.add(peer);
+    public void onOpen(Session session) {
+        session.getUserProperties().put("futures",
+                new HashMap<String, Future<?>>());
     }
 
     @OnClose
-    public void onClose(Session peer) {
-        peers.remove(peer);
+    public void onClose(Session session) {
+        JsonRPCHandler.cancelFuturesForSession(session);
     }
 
     @OnMessage
-    public void handleJsonRPCRequest(JsonNode jsonRequest, Session session) {
+    public void handleJsonRPCRequest(JsonNode jsonNode, Session session) {
+        JsonRPCHandler jsonRPCHandler = JsonRPCHandlerFactory.create(jsonNode,
+                session);
 
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            if (session.isOpen()) {
-                StringWriter writer = new StringWriter();
-                ObjectNode result = JsonRPCResponseFactory.mapper.createObjectNode();
-                result.put("status", "OK");
-                ObjectNode response = JsonRPCResponseFactory.result(
-                        jsonRequest.get("id").asText(), result);
-                mapper.writeValue(writer, response);
-                session.getBasicRemote().sendText(writer.toString());
-            }
-        } catch (IOException e) {
-            try {
-                session.close();
-            } catch (IOException e1) {
-                // Ignore
-            }
-        }
+        jsonRPCHandler.putFuture(executorService.submit(jsonRPCHandler
+                .getCleanFutureThread()));
     }
 
     /**

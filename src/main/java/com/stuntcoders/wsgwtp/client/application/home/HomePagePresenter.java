@@ -16,8 +16,8 @@
 
 package com.stuntcoders.wsgwtp.client.application.home;
 
-import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.inject.Inject;
@@ -29,7 +29,7 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.sksamuel.gwt.websockets.Websocket;
-import com.stuntcoders.wsgwtp.client.JsonRPCRequestFactory;
+import com.stuntcoders.wsgwtp.client.JsonRPCRequestBuilder;
 import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent.JsonRPCResponseHandler;
@@ -66,10 +66,10 @@ public class HomePagePresenter extends
     public void send() {
 
         JSONObject params = new JSONObject();
-        params.put("subtrahend", new JSONNumber(23));
-        params.put("minuend", new JSONNumber(42));
+        params.put("command", new JSONString(getView().getMessageTextBox()
+                .getText()));
 
-        JSONObject jsonObject = JsonRPCRequestFactory.request("exec", params);
+        JSONObject jsonObject = JsonRPCRequestBuilder.request("exec", params);
 
         socket.send(jsonObject.toString());
     }

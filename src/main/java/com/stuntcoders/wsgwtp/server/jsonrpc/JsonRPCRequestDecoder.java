@@ -1,4 +1,4 @@
-package com.stuntcoders.wsgwtp.server;
+package com.stuntcoders.wsgwtp.server.jsonrpc;
 
 import java.io.IOException;
 
