@@ -4,9 +4,15 @@ import javax.websocket.Session;
 
 import org.codehaus.jackson.JsonNode;
 
+import com.google.inject.Inject;
+
 public class JsonRPCHandlerFactory {
 
-    public static JsonRPCHandler create(JsonNode jsonNode, Session session) {
+    @Inject
+    public JsonRPCHandlerFactory() {
+    }
+
+    public JsonRPCHandler create(JsonNode jsonNode, Session session) {
         switch (jsonNode.get("method").asText()) {
         case "exec":
             return new JsonRPCHandlerExec(jsonNode, session);

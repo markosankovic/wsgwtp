@@ -14,12 +14,16 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.codehaus.jackson.JsonNode;
 
+import com.google.inject.Inject;
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequestDecoder;
 import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandler;
 import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandlerFactory;
 
 @ServerEndpoint(value = "/wsendpoint", configurator = WsEndpointConfigurator.class, decoders = JsonRPCRequestDecoder.class)
 public class WsEndpoint {
+
+    @Inject
+    JsonRPCHandlerFactory jsonRPCHandlerFactory;
 
     /**
      * Creates a thread pool that creates new threads as needed. Use for
@@ -41,7 +45,7 @@ public class WsEndpoint {
 
     @OnMessage
     public void handleJsonRPCRequest(JsonNode jsonNode, Session session) {
-        JsonRPCHandler jsonRPCHandler = JsonRPCHandlerFactory.create(jsonNode,
+        JsonRPCHandler jsonRPCHandler = jsonRPCHandlerFactory.create(jsonNode,
                 session);
 
         jsonRPCHandler.putFuture(executorService.submit(jsonRPCHandler
