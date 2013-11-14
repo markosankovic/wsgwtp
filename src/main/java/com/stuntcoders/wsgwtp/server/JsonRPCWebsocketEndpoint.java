@@ -19,8 +19,8 @@ import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequestDecoder;
 import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandler;
 import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandlerFactory;
 
-@ServerEndpoint(value = "/wsendpoint", configurator = WsEndpointConfigurator.class, decoders = JsonRPCRequestDecoder.class)
-public class WsEndpoint {
+@ServerEndpoint(value = "/JsonRPCWebsocketEndpoint", configurator = JsonRPCWebsocketEndpointConfigurator.class, decoders = JsonRPCRequestDecoder.class)
+public class JsonRPCWebsocketEndpoint {
 
     @Inject
     JsonRPCHandlerFactory jsonRPCHandlerFactory;

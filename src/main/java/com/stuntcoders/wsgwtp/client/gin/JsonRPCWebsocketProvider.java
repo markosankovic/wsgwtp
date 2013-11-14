@@ -11,7 +11,7 @@ import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
 
-public class WebsocketProvider implements Provider<Websocket> {
+public class JsonRPCWebsocketProvider implements Provider<Websocket> {
 
     @Inject
     EventBus eventBus;
@@ -21,9 +21,9 @@ public class WebsocketProvider implements Provider<Websocket> {
         /**
          * Example: ws://localhost:8080/wsgwtp/
          */
-        String wsBaseURL = GWT.getHostPageBaseURL().replace("http://", "ws://");
+        String websocketBaseURL = GWT.getHostPageBaseURL().replace("http://", "ws://");
 
-        Websocket socket = new Websocket(wsBaseURL + "/wsendpoint");
+        Websocket socket = new Websocket(websocketBaseURL + "/JsonRPCWebsocketEndpoint");
 
         socket.addListener(new WebsocketListener() {
 

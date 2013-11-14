@@ -20,6 +20,7 @@ public class JsonRPCHandlerExec extends JsonRPCHandler {
     @Override
     public void run() {
         Process process = null;
+
         try {
             process = Runtime.getRuntime().exec(
                     getParams().get("command").getTextValue());

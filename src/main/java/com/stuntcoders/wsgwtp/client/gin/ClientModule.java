@@ -38,7 +38,7 @@ public class ClientModule extends AbstractPresenterModule {
         install(new ApplicationModule());
 
         // Providers
-        bind(Websocket.class).toProvider(WebsocketProvider.class).in(
+        bind(Websocket.class).toProvider(JsonRPCWebsocketProvider.class).in(
                 Singleton.class);
 
         // DefaultPlaceManager Places
