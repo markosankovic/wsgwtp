@@ -4,5 +4,5 @@ import com.gwtplatform.mvp.client.UiHandlers;
 
 public interface HomePageUiHandlers extends UiHandlers {
 
-    void send();
+    void execute();
 }

@@ -84,6 +84,10 @@ public abstract class JsonRPCHandler implements Runnable {
         };
     }
 
+    public Future<?> getCurrentFuture() {
+        return getFutures().get(id);
+    }
+
     public void removeFuture() {
         getFutures().remove(id);
     }

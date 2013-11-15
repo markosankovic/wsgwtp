@@ -19,4 +19,15 @@ public class JsonRPCRequestBuilder {
 
         return jsonObject;
     }
+
+    public static JSONObject interrupt(JSONValue id) {
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("jsonrpc", new JSONString("2.0"));
+        jsonObject.put("method", new JSONString("interrupt"));
+        jsonObject.put("id", id);
+
+        return jsonObject;
+    }
 }

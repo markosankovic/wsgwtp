@@ -17,11 +17,13 @@
 package com.stuntcoders.wsgwtp.client.application.home;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
+import com.stuntcoders.wsgwtp.client.application.home.console.ConsoleModule;
 
 public class HomeModule extends AbstractPresenterModule {
 
     @Override
     protected void configure() {
+        install(new ConsoleModule());
         bindPresenter(HomePagePresenter.class, HomePagePresenter.MyView.class,
                 HomePageView.class, HomePagePresenter.MyProxy.class);
     }

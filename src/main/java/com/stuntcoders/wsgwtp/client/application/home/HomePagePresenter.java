@@ -16,12 +16,14 @@
 
 package com.stuntcoders.wsgwtp.client.application.home;
 
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.common.client.IndirectProvider;
+import com.gwtplatform.common.client.StandardProvider;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -29,53 +31,63 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.sksamuel.gwt.websockets.Websocket;
-import com.stuntcoders.wsgwtp.client.JsonRPCRequestBuilder;
 import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
-import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
-import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent.JsonRPCResponseHandler;
+import com.stuntcoders.wsgwtp.client.application.home.console.ConsolePresenter;
 import com.stuntcoders.wsgwtp.client.place.NameTokens;
 
 public class HomePagePresenter extends
         Presenter<HomePagePresenter.MyView, HomePagePresenter.MyProxy>
-        implements HomePageUiHandlers, JsonRPCResponseHandler {
+        implements HomePageUiHandlers {
 
     public interface MyView extends View, HasUiHandlers<HomePageUiHandlers> {
-        TextBox getMessageTextBox();
+        TextBox getExecuteTextBox();
+
+        TabLayoutPanel getTabLayoutPanel();
     }
+
+    IndirectProvider<ConsolePresenter> consolePresenterIndirectProvider;
 
     @ProxyStandard
     @NameToken(NameTokens.home)
     public interface MyProxy extends ProxyPlace<HomePagePresenter> {
     }
 
-    Websocket socket;
-
     @Inject
     public HomePagePresenter(EventBus eventBus, MyView view, MyProxy proxy,
-            Websocket socket) {
+            Provider<ConsolePresenter> consolePresenterProvider,
+            Websocket websocket) {
         super(eventBus, view, proxy, ApplicationPresenter.SLOT_SetMainContent);
 
         getView().setUiHandlers(this);
 
-        this.socket = socket;
-
-        this.addRegisteredHandler(JsonRPCResponseEvent.TYPE, this);
+        this.consolePresenterIndirectProvider = new StandardProvider<ConsolePresenter>(
+                consolePresenterProvider);
     }
 
     @Override
-    public void send() {
+    public void execute() {
 
-        JSONObject params = new JSONObject();
-        params.put("command", new JSONString(getView().getMessageTextBox()
-                .getText()));
+        consolePresenterIndirectProvider
+                .get(new AsyncCallback<ConsolePresenter>() {
+                    @Override
+                    public void onSuccess(ConsolePresenter consolePresenter) {
+                        int tabCount = getView().getTabLayoutPanel()
+                                .getWidgetCount();
 
-        JSONObject jsonObject = JsonRPCRequestBuilder.request("exec", params);
+                        getView().getTabLayoutPanel().add(
+                                consolePresenter.getView().asWidget(),
+                                "Console " + tabCount);
+                        getView().getTabLayoutPanel().selectTab(tabCount);
 
-        socket.send(jsonObject.toString());
+                        consolePresenter.execute(getView().getExecuteTextBox()
+                                .getText());
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        // NO-OP
+                    }
+                });
     }
 
-    @Override
-    public void onJSONRPCResponse(JSONObject jsonObject) {
-        Window.alert(jsonObject.toString());
-    }
 }

@@ -21,6 +21,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -30,10 +31,13 @@ public class HomePageView extends ViewWithUiHandlers<HomePageUiHandlers>
         implements HomePagePresenter.MyView {
 
     @UiField
-    TextBox messageTextBox;
+    TextBox executeTextBox;
 
     @UiField
-    Button sendButton;
+    Button executeButton;
+
+    @UiField
+    TabLayoutPanel tabLayoutPanel;
 
     public interface Binder extends UiBinder<Widget, HomePageView> {
     }
@@ -43,13 +47,18 @@ public class HomePageView extends ViewWithUiHandlers<HomePageUiHandlers>
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    @UiHandler("sendButton")
-    void submitButtonOnClick(ClickEvent event) {
-        getUiHandlers().send();
+    @UiHandler("executeButton")
+    void executeButtonOnClick(ClickEvent event) {
+        getUiHandlers().execute();
     }
 
     @Override
-    public TextBox getMessageTextBox() {
-        return messageTextBox;
+    public TextBox getExecuteTextBox() {
+        return executeTextBox;
+    }
+
+    @Override
+    public TabLayoutPanel getTabLayoutPanel() {
+        return tabLayoutPanel;
     }
 }
