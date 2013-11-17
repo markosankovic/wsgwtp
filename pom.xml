@@ -31,6 +31,12 @@
         <maven-processor-plugin.version>2.0.5</maven-processor-plugin.version>
         <maven-build-helper-plugin.version>1.7</maven-build-helper-plugin.version>
 
+        <!-- other -->
+        <javax.websocket-api.version>1.0</javax.websocket-api.version>
+        <gwt-websockets.version>1.0.3</gwt-websockets.version>
+        <jackson.version>1.9.13</jackson.version>
+        <log4j.version>1.2.17</log4j.version>
+
         <target.jdk>1.7</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -179,23 +185,28 @@
         <dependency>
             <groupId>javax.websocket</groupId>
             <artifactId>javax.websocket-api</artifactId>
-            <version>1.0</version>
+            <version>${javax.websocket-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sksamuel.gwt</groupId>
             <artifactId>gwt-websockets</artifactId>
-            <version>1.0.3</version>
+            <version>${gwt-websockets.version}</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.13</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
     </dependencies>
 </project>
