@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import javax.websocket.Session;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
@@ -18,13 +19,14 @@ import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseBuilder;
  */
 public class JsonRPCHandlerExec extends JsonRPCHandler {
 
+    private static Logger logger = Logger.getLogger(JsonRPCHandlerExec.class);
+
     public JsonRPCHandlerExec(JsonNode jsonNode, Session session) {
         super(jsonNode, session);
     }
 
     @Override
     public void run() {
-        System.out.println(this);
         Process process = null;
 
         try {
@@ -37,8 +39,7 @@ public class JsonRPCHandlerExec extends JsonRPCHandler {
 
             String line = reader.readLine();
             while (line != null) {
-                System.out.println(Thread.currentThread().isInterrupted());
-                System.out.println(line);
+                logger.info(line);
                 ObjectNode response = JsonRPCResponseBuilder.result(getId());
                 response.put("result", line);
 

@@ -36,6 +36,7 @@
         <gwt-websockets.version>1.0.3</gwt-websockets.version>
         <jackson.version>1.9.13</jackson.version>
         <log4j.version>1.2.17</log4j.version>
+        <slf4j-log4j12.version>1.7.5</slf4j-log4j12.version>
 
         <target.jdk>1.7</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -207,6 +208,11 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-log4j12.version}</version>
         </dependency>
     </dependencies>
 </project>
