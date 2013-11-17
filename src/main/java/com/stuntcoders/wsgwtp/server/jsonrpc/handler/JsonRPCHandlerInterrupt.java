@@ -12,7 +12,9 @@ public class JsonRPCHandlerInterrupt extends JsonRPCHandler {
 
     @Override
     public void run() {
-        getCurrentFuture().cancel(true);
-        removeFuture();
+        System.out.println(this);
+        String id = getParams().get("id").getTextValue();
+        System.out.println("Interrupt future with request id: " + id);
+        getFutureById(id).cancel(true);
     }
 }

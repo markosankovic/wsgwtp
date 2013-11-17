@@ -84,7 +84,7 @@ public abstract class JsonRPCHandler implements Runnable {
         };
     }
 
-    public Future<?> getCurrentFuture() {
+    public Future<?> getFutureById(String id) {
         return getFutures().get(id);
     }
 
@@ -103,5 +103,24 @@ public abstract class JsonRPCHandler implements Runnable {
 
     public Future<?> putFuture(Future<?> future) {
         return getFutures().put(id, future);
+    }
+
+    public void writeResponseAsStringToRemote(JsonNode response) {
+        try {
+            session.getBasicRemote().sendText(
+                    JsonRPCResponseBuilder.mapper.writeValueAsString(response));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append(getClass().getName());
+        sb.append(": ");
+        sb.append(id);
+
+        return sb.toString();
     }
 }

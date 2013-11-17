@@ -19,37 +19,32 @@ public class JsonRPCHandlerExec extends JsonRPCHandler {
 
     @Override
     public void run() {
+        System.out.println(this);
         Process process = null;
 
         try {
             process = Runtime.getRuntime().exec(
                     getParams().get("command").getTextValue());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            process.waitFor();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                process.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    process.getInputStream()));
 
-        try {
             String line = reader.readLine();
             while (line != null) {
+                System.out.println(Thread.currentThread().isInterrupted());
+                System.out.println(line);
                 ObjectNode response = JsonRPCResponseBuilder.result(getId());
-
                 response.put("result", line);
 
-                try {
-                    getSession().getBasicRemote().sendText(
-                            JsonRPCResponseBuilder.mapper
-                                    .writeValueAsString(response));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                writeResponseAsStringToRemote(response);
 
                 line = reader.readLine();
             }
             reader.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

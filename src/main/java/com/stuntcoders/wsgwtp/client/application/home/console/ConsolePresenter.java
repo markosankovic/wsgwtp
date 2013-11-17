@@ -2,6 +2,7 @@ package com.stuntcoders.wsgwtp.client.application.home.console;
 
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.ui.Button;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -16,7 +17,11 @@ public class ConsolePresenter extends PresenterWidget<ConsolePresenter.MyView>
         implements ConsoleUiHandlers, JsonRPCResponseHandler {
     public interface MyView extends View, HasUiHandlers<ConsoleUiHandlers> {
 
-        public void appendText(String text);
+        void appendText(String text);
+
+        Button getInterruptButton();
+
+        void removeInterruptButton();
     }
 
     private Websocket websocket;
@@ -53,8 +58,9 @@ public class ConsolePresenter extends PresenterWidget<ConsolePresenter.MyView>
     public void execute(String command) {
         JSONObject params = new JSONObject();
         params.put("command", new JSONString(command));
-
         jsonObject = JsonRPCRequestBuilder.request("exec", params);
+
+        getView().appendText(jsonObject.toString());
 
         websocket.send(jsonObject.toString());
     }
@@ -73,10 +79,12 @@ public class ConsolePresenter extends PresenterWidget<ConsolePresenter.MyView>
             JSONString result = (JSONString) jsonObject.get("result");
 
             if (result.stringValue().equals("jsonrpc-done")) {
-                // NO-OP
+                getView().appendText(jsonObject.toString());
             } else {
                 getView().appendText(result.stringValue());
             }
+
+            getView().removeInterruptButton();
         }
     }
 }

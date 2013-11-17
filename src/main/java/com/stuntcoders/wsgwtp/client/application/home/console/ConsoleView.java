@@ -42,4 +42,14 @@ public class ConsoleView extends ViewWithUiHandlers<ConsoleUiHandlers>
             getUiHandlers().interrupt();
         }
     }
+
+    @Override
+    public Button getInterruptButton() {
+        return interruptButton;
+    }
+
+    @Override
+    public void removeInterruptButton() {
+        interruptButton.removeFromParent();
+    }
 }

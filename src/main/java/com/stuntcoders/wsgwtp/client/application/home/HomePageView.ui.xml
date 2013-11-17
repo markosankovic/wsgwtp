@@ -6,7 +6,9 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<g:HorizontalPanel>
+		<h1>GWTP WebSocket JSON-RPC Communication Example</h1>
+		<g:HorizontalPanel spacing="4" verticalAlignment="ALIGN_MIDDLE">
+			<g:Label>Command</g:Label>
 			<g:TextBox ui:field="executeTextBox"></g:TextBox>
 			<g:Button ui:field="executeButton" text="Execute"></g:Button>
 		</g:HorizontalPanel>

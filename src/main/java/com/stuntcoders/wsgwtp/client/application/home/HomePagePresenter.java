@@ -74,13 +74,16 @@ public class HomePagePresenter extends
                         int tabCount = getView().getTabLayoutPanel()
                                 .getWidgetCount();
 
+                        String command = getView().getExecuteTextBox()
+                                .getText();
+
                         getView().getTabLayoutPanel().add(
                                 consolePresenter.getView().asWidget(),
-                                "Console " + tabCount);
+                                command.length() <= 32 ? command : command
+                                        .substring(0, 32));
                         getView().getTabLayoutPanel().selectTab(tabCount);
 
-                        consolePresenter.execute(getView().getExecuteTextBox()
-                                .getText());
+                        consolePresenter.execute(command);
                     }
 
                     @Override
