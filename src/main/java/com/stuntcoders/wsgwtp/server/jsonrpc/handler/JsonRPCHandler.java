@@ -7,12 +7,15 @@ import java.util.concurrent.Future;
 
 import javax.websocket.Session;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseBuilder;
 
 public abstract class JsonRPCHandler implements Runnable {
+
+    private static Logger logger = Logger.getLogger(JsonRPCHandler.class);
 
     /**
      * JSON-RPC request method
@@ -148,6 +151,8 @@ public abstract class JsonRPCHandler implements Runnable {
      */
     public void removeFuture() {
         getFutures().remove(id);
+        logger.info("Number of futures for " + session.getId() + " session: "
+                + getFutures().size());
     }
 
     /**
