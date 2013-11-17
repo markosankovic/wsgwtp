@@ -34,20 +34,28 @@ public class JsonRPCWebsocketEndpoint {
 
     @OnOpen
     public void onOpen(Session session) {
+        /**
+         * Each session has futures (handlers) associated with. All handlers are
+         * executed in a separate thread. Futures are mapped by request id.
+         */
         session.getUserProperties().put("futures",
                 new HashMap<String, Future<?>>());
     }
 
     @OnClose
     public void onClose(Session session) {
+        /**
+         * Cancel all running handlers associated with this session.
+         */
         JsonRPCHandler.cancelFuturesForSession(session);
     }
 
     @OnMessage
     public void handleJsonRPCRequest(JsonNode jsonNode, Session session) {
+        // Build concrete request handler
         JsonRPCHandler jsonRPCHandler = jsonRPCHandlerFactory.create(jsonNode,
                 session);
-
+        // Execute request handler
         jsonRPCHandler.putFuture(executorService.submit(jsonRPCHandler
                 .getCleanFutureThread()));
     }

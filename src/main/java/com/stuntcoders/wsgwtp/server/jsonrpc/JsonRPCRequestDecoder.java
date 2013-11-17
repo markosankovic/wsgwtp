@@ -9,6 +9,9 @@ import javax.websocket.EndpointConfig;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
+/**
+ * Decode serialized JSON received from a client.
+ */
 public class JsonRPCRequestDecoder implements Decoder.Text<JsonNode> {
 
     @Override
@@ -31,8 +34,9 @@ public class JsonRPCRequestDecoder implements Decoder.Text<JsonNode> {
             jsonNode = mapper.readTree(s);
         } catch (IOException e) {
             /**
-             * -32700 Parse error Invalid JSON was received by the server. An
-             * error occurred on the server while parsing the JSON text.
+             * TODO Handle exceptions according to JSON-RPC 2.0 Specification,
+             * e.g. -32700 Parse error Invalid JSON was received by the server.
+             * An error occurred on the server while parsing the JSON text.
              */
         }
 

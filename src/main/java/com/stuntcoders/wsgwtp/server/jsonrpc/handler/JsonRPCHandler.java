@@ -14,14 +14,32 @@ import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseBuilder;
 
 public abstract class JsonRPCHandler implements Runnable {
 
+    /**
+     * JSON-RPC request method
+     */
     private String method;
 
+    /**
+     * JSON-RPC request params.
+     */
     private JsonNode params;
 
+    /**
+     * JSON-RPC request id.
+     */
     private String id;
 
+    /**
+     * WebSocket Session.
+     */
     private Session session;
 
+    /**
+     * JsonRPCHandler.
+     * 
+     * @param jsonNode
+     * @param session
+     */
     public JsonRPCHandler(JsonNode jsonNode, Session session) {
         this.method = jsonNode.get("method").getTextValue();
         this.params = jsonNode.get("params");
@@ -29,26 +47,57 @@ public abstract class JsonRPCHandler implements Runnable {
         this.session = session;
     }
 
+    /**
+     * Get method associated with JSON-RPC request.
+     * 
+     * @return
+     */
     public String getMethod() {
         return method;
     }
 
+    /**
+     * Get params associated with JSON-RPC request.
+     * 
+     * @return
+     */
     public JsonNode getParams() {
         return params;
     }
 
+    /**
+     * Get JSON-RPC request id.
+     * 
+     * @return
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Get WebSocket Session.
+     * 
+     * @return
+     */
     public Session getSession() {
         return session;
     }
 
+    /**
+     * Get futures from WebSocket session of this handler.
+     * 
+     * @return
+     */
     public Map<String, Future<?>> getFutures() {
         return JsonRPCHandler.getFuturesForSession(session);
     }
 
+    /**
+     * Get futures of any WebSocket session.
+     * 
+     * @param session
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static Map<String, Future<?>> getFuturesForSession(Session session) {
         return (HashMap<String, Future<?>>) session.getUserProperties().get(
@@ -84,27 +133,51 @@ public abstract class JsonRPCHandler implements Runnable {
         };
     }
 
+    /**
+     * Get future by request id.
+     * 
+     * @param id
+     * @return
+     */
     public Future<?> getFutureById(String id) {
         return getFutures().get(id);
     }
 
+    /**
+     * Remove future of this handler from WebSocket session futures.
+     */
     public void removeFuture() {
         getFutures().remove(id);
     }
 
+    /**
+     * Cancel all futures of a session.
+     * 
+     * @param session
+     */
     public static void cancelFuturesForSession(Session session) {
         Map<String, Future<?>> futures = JsonRPCHandler
                 .getFuturesForSession(session);
         for (Future<?> future : futures.values()) {
             future.cancel(true);
         }
-        session.getUserProperties().clear();
     }
 
+    /**
+     * Add future to the list of futures for this handler.
+     * 
+     * @param future
+     * @return
+     */
     public Future<?> putFuture(Future<?> future) {
         return getFutures().put(id, future);
     }
 
+    /**
+     * Send serialized JSON to a WebSocket peer.
+     * 
+     * @param response
+     */
     public void writeResponseAsStringToRemote(JsonNode response) {
         try {
             session.getBasicRemote().sendText(
@@ -114,6 +187,9 @@ public abstract class JsonRPCHandler implements Runnable {
         }
     }
 
+    /**
+     * String representation of this handler.
+     */
     public String toString() {
         StringBuffer sb = new StringBuffer();
 

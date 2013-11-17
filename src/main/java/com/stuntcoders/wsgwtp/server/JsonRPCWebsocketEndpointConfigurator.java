@@ -4,6 +4,10 @@ import javax.websocket.server.ServerEndpointConfig.Configurator;
 
 import com.stuntcoders.wsgwtp.server.guice.GuiceServletConfigFactory;
 
+/**
+ * Instantiates WebSocket end-point with Guice injector so that @Inject can be
+ * used in JsonRPCWebsocketEndpoint.
+ */
 public class JsonRPCWebsocketEndpointConfigurator extends Configurator {
 
     @Override

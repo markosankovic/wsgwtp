@@ -4,6 +4,9 @@ import javax.websocket.Session;
 
 import org.codehaus.jackson.JsonNode;
 
+/**
+ * Interrupt previously started handler.
+ */
 public class JsonRPCHandlerInterrupt extends JsonRPCHandler {
 
     public JsonRPCHandlerInterrupt(JsonNode jsonNode, Session session) {

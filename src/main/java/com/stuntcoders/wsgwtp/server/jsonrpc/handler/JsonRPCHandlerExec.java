@@ -11,6 +11,11 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseBuilder;
 
+/**
+ * Execute arbitrary shell command.
+ * 
+ * TODO Buffer several lines of output together before sending to a client.
+ */
 public class JsonRPCHandlerExec extends JsonRPCHandler {
 
     public JsonRPCHandlerExec(JsonNode jsonNode, Session session) {

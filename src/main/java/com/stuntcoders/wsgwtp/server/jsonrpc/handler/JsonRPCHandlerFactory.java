@@ -6,6 +6,12 @@ import org.codehaus.jackson.JsonNode;
 
 import com.google.inject.Inject;
 
+/**
+ * Build JSONRPCHandler.
+ * 
+ * Concrete implementation of handler depends on the JSON-RPC request coming
+ * from a client.
+ */
 public class JsonRPCHandlerFactory {
 
     @Inject
