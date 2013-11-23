@@ -13,6 +13,7 @@ import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
 import com.stuntcoders.wsgwtp.client.event.WebSocketOnOpenEvent;
+import com.stuntcoders.wsgwtp.client.jsonrpc.JsonRPCResponse;
 
 public class JsonRPCWebsocketProvider implements Provider<Websocket> {
 
@@ -44,8 +45,14 @@ public class JsonRPCWebsocketProvider implements Provider<Websocket> {
             @Override
             public void onMessage(String msg) {
                 logger.info("WebSocket message received: " + msg);
-                eventBus.fireEvent(new JsonRPCResponseEvent(
-                        (JSONObject) JSONParser.parseLenient(msg)));
+
+                JSONObject jsonObject = (JSONObject) JSONParser
+                        .parseLenient(msg);
+
+                JsonRPCResponse jsonRPCResponse = new JsonRPCResponse(
+                        jsonObject);
+
+                eventBus.fireEvent(new JsonRPCResponseEvent(jsonRPCResponse));
             }
 
             @Override

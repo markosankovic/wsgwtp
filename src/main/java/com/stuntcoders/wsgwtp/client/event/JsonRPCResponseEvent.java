@@ -1,31 +1,31 @@
 package com.stuntcoders.wsgwtp.client.event;
 
-import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.EventHandler;
+import com.stuntcoders.wsgwtp.client.jsonrpc.JsonRPCResponse;
 import com.google.gwt.event.shared.HasHandlers;
-import com.google.gwt.json.client.JSONObject;
 
 public class JsonRPCResponseEvent extends
         GwtEvent<JsonRPCResponseEvent.JsonRPCResponseHandler> {
 
     public static Type<JsonRPCResponseHandler> TYPE = new Type<JsonRPCResponseHandler>();
-    private JSONObject jsonObject;
+    private JsonRPCResponse jsonRPCResponse;
 
     public interface JsonRPCResponseHandler extends EventHandler {
-        void onJSONRPCResponse(JSONObject jsonObject);
+        void onJsonRPCResponse(JsonRPCResponseEvent event);
     }
 
-    public JsonRPCResponseEvent(JSONObject jsonObject) {
-        this.jsonObject = jsonObject;
+    public JsonRPCResponseEvent(JsonRPCResponse jsonRPCResponse) {
+        this.jsonRPCResponse = jsonRPCResponse;
     }
 
-    public JSONObject getJSONObject() {
-        return jsonObject;
+    public JsonRPCResponse getJsonRPCResponse() {
+        return jsonRPCResponse;
     }
 
     @Override
     protected void dispatch(JsonRPCResponseHandler handler) {
-        handler.onJSONRPCResponse(jsonObject);
+        handler.onJsonRPCResponse(this);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class JsonRPCResponseEvent extends
         return TYPE;
     }
 
-    public static void fire(HasHandlers source, JSONObject jsonObject) {
-        source.fireEvent(new JsonRPCResponseEvent(jsonObject));
+    public static void fire(HasHandlers source, JsonRPCResponse jsonRPCResponse) {
+        source.fireEvent(new JsonRPCResponseEvent(jsonRPCResponse));
     }
 }

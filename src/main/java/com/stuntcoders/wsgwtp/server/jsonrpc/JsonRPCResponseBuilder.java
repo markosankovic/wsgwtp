@@ -1,6 +1,5 @@
 package com.stuntcoders.wsgwtp.server.jsonrpc;
 
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 
@@ -23,12 +22,10 @@ public class JsonRPCResponseBuilder {
      * @param result
      * @return
      */
-    public static ObjectNode result(String id, ObjectNode result) {
-        ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put("jsonrpc", "2.0");
-        objectNode.put("result", result);
-        objectNode.put("id", id);
-        return objectNode;
+    public static JsonRPCResponseResult result(String id, ObjectNode result) {
+        JsonRPCResponseResult response = result(id);
+        response.setResult(mapper.createObjectNode());
+        return response;
     }
 
     /**
@@ -37,11 +34,11 @@ public class JsonRPCResponseBuilder {
      * @param id
      * @return
      */
-    public static ObjectNode result(String id) {
-        ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put("jsonrpc", "2.0");
-        objectNode.put("id", id);
-        return objectNode;
+    public static JsonRPCResponseResult result(String id) {
+        JsonRPCResponseResult response = new JsonRPCResponseResult();
+        response.setId(id);
+        response.setJsonrpc("2.0");
+        return response;
     }
 
     /**
@@ -50,28 +47,14 @@ public class JsonRPCResponseBuilder {
      * @param id
      * @return
      */
-    public static ObjectNode result(String id, String result) {
-        ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put("jsonrpc", "2.0");
-        objectNode.put("result", result);
-        objectNode.put("id", id);
-        return objectNode;
+    public static JsonRPCResponseResult result(String id, String result) {
+        JsonRPCResponseResult response = result(id);
+        response.setResult(result);
+        return response;
     }
 
-    /**
-     * Error response object.
-     * 
-     * @see http://www.jsonrpc.org/specification#error_object
-     * 
-     * @param id
-     * @param error
-     * @return
-     */
-    public static JsonNode error(String id, ObjectNode error) {
-        ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put("jsonrpc", "2.0");
-        objectNode.put("error", error);
-        objectNode.put("id", id);
-        return objectNode;
+    public static JsonRPCResponseError error() {
+        // TODO Implement
+        return null;
     }
 }

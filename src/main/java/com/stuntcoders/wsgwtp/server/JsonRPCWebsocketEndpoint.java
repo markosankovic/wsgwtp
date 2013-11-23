@@ -17,10 +17,11 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequest;
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequestDecoder;
+import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseEncoder;
 import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandler;
 import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandlerFactory;
 
-@ServerEndpoint(value = "/JsonRPCWebsocketEndpoint", configurator = JsonRPCWebsocketEndpointConfigurator.class, decoders = JsonRPCRequestDecoder.class)
+@ServerEndpoint(value = "/JsonRPCWebsocketEndpoint", configurator = JsonRPCWebsocketEndpointConfigurator.class, decoders = JsonRPCRequestDecoder.class, encoders = JsonRPCResponseEncoder.class)
 public class JsonRPCWebsocketEndpoint {
 
     private static Logger logger = Logger

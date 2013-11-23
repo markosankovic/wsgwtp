@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import javax.websocket.EncodeException;
 import javax.websocket.Session;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequest;
-import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseBuilder;
 
 public abstract class JsonRPCHandler implements Runnable {
 
@@ -109,18 +107,6 @@ public abstract class JsonRPCHandler implements Runnable {
                 try {
                     JsonRPCHandler.this.run();
                 } finally {
-                    try {
-                        ObjectNode response = JsonRPCResponseBuilder.result(
-                                JsonRPCHandler.this.getId(), "jsonrpc-done");
-                        getSession().getBasicRemote().sendText(
-                                JsonRPCResponseBuilder.mapper
-                                        .writeValueAsString(response));
-                        logger.info("Clean future finally done: "
-                                + JsonRPCHandler.this.getId());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
                     removeFuture(); // Remove done future from session
                 }
             }
@@ -170,15 +156,15 @@ public abstract class JsonRPCHandler implements Runnable {
     }
 
     /**
-     * Send serialized JSON to a WebSocket peer.
+     * Send object to remote peer.
      * 
-     * @param response
+     * @param data
      */
-    public void writeResponseAsStringToRemote(JsonNode response) {
+    synchronized public void sendObject(Object data) {
         try {
-            session.getBasicRemote().sendText(
-                    JsonRPCResponseBuilder.mapper.writeValueAsString(response));
-        } catch (IOException e) {
+            session.getBasicRemote().sendObject(data);
+        } catch (IOException | EncodeException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }

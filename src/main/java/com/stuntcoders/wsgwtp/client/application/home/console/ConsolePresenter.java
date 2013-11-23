@@ -1,7 +1,5 @@
 package com.stuntcoders.wsgwtp.client.application.home.console;
 
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.ui.Button;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -9,9 +7,9 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.sksamuel.gwt.websockets.Websocket;
-import com.stuntcoders.wsgwtp.client.JsonRPCRequestBuilder;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent.JsonRPCResponseHandler;
+import com.stuntcoders.wsgwtp.client.jsonrpc.JsonRPCRequest;
 
 public class ConsolePresenter extends PresenterWidget<ConsolePresenter.MyView>
         implements ConsoleUiHandlers, JsonRPCResponseHandler {
@@ -26,7 +24,7 @@ public class ConsolePresenter extends PresenterWidget<ConsolePresenter.MyView>
 
     private Websocket websocket;
 
-    private JSONObject jsonObject;
+    private JsonRPCRequest request;
 
     @Inject
     ConsolePresenter(EventBus eventBus, MyView view, Websocket websocket) {
@@ -40,7 +38,7 @@ public class ConsolePresenter extends PresenterWidget<ConsolePresenter.MyView>
     protected void onBind() {
         super.onBind();
 
-        this.addRegisteredHandler(JsonRPCResponseEvent.TYPE, this);
+        this.addRegisteredHandler(JsonRPCResponseEvent.getType(), this);
     }
 
     protected void onHide() {
@@ -56,34 +54,34 @@ public class ConsolePresenter extends PresenterWidget<ConsolePresenter.MyView>
     }
 
     public void execute(String command) {
-        JSONObject params = new JSONObject();
-        params.put("command", new JSONString(command));
-        jsonObject = JsonRPCRequestBuilder.request("exec", params);
 
-        getView().appendText(jsonObject.toString());
+        request = new JsonRPCRequest("exec");
+        request.putParam("command", command);
 
-        websocket.send(jsonObject.toString());
+        getView().appendText(request.toJSON());
+
+        websocket.send(request.toJSON());
     }
 
     @Override
     public void interrupt() {
-        JSONObject interruptJsonObject = JsonRPCRequestBuilder
-                .interrupt(jsonObject.get("id"));
-        websocket.send(interruptJsonObject.toString());
+        JsonRPCRequest interrupt = new JsonRPCRequest("interrupt");
+        interrupt.putParam("id", request.getId());
+
+        getView().appendText(interrupt.toJSON());
+
+        websocket.send(interrupt.toJSON());
     }
 
     @Override
-    public void onJSONRPCResponse(JSONObject jsonObject) {
-        if (jsonObject.get("id").equals(
-                ConsolePresenter.this.jsonObject.get("id"))) {
-            JSONString result = (JSONString) jsonObject.get("result");
-
-            if (result.stringValue().equals("jsonrpc-done")) {
-                getView().appendText(jsonObject.toString());
+    public void onJsonRPCResponse(JsonRPCResponseEvent event) {
+        if (event.getJsonRPCResponse().getId().equals(request.getId())) {
+            String result = event.getJsonRPCResponse().getResultAsString();
+            if (result.equals("exec-done")) {
+                getView().appendText(event.getJsonRPCResponse().toJSON());
             } else {
-                getView().appendText(result.stringValue());
+                getView().appendText(result);
             }
-
             getView().removeInterruptButton();
         }
     }

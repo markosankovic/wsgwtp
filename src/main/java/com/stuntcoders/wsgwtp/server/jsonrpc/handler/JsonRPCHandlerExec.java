@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 import javax.websocket.Session;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.node.ObjectNode;
 
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequest;
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseBuilder;
+import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseResult;
 
 /**
  * Execute arbitrary shell command.
@@ -39,12 +39,9 @@ public class JsonRPCHandlerExec extends JsonRPCHandler {
 
             String line = reader.readLine();
             while (line != null) {
-                logger.info(line);
-                ObjectNode response = JsonRPCResponseBuilder.result(getId());
-                response.put("result", line);
-
-                writeResponseAsStringToRemote(response);
-
+                JsonRPCResponseResult response = JsonRPCResponseBuilder.result(
+                        getId(), line);
+                sendObject(response);
                 line = reader.readLine();
             }
             reader.close();
@@ -52,6 +49,8 @@ public class JsonRPCHandlerExec extends JsonRPCHandler {
             e.printStackTrace();
         } catch (InterruptedException e) {
             logger.info("Interrupted: " + getId());
+        } finally {
+            sendObject(JsonRPCResponseBuilder.result(getId(), "exec-done"));
         }
     }
 }
