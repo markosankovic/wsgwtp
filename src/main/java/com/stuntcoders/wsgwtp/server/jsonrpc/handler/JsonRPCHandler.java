@@ -115,6 +115,8 @@ public abstract class JsonRPCHandler implements Runnable {
                         getSession().getBasicRemote().sendText(
                                 JsonRPCResponseBuilder.mapper
                                         .writeValueAsString(response));
+                        logger.info("Clean future finally done: "
+                                + JsonRPCHandler.this.getId());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

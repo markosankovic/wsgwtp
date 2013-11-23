@@ -51,7 +51,7 @@ public class JsonRPCHandlerExec extends JsonRPCHandler {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.info("Interrupted: " + getId());
         }
     }
 }
