@@ -39,6 +39,11 @@ public class JsonRPCWebsocketEndpoint {
     @OnOpen
     public void onOpen(Session session) {
         /**
+         * Session will never timeout due to inactivity.
+         */
+        session.setMaxIdleTimeout(0);
+
+        /**
          * Each session has futures (handlers) associated with. All handlers are
          * executed in a separate thread. Futures are mapped by request id.
          */
