@@ -2,9 +2,8 @@ package com.stuntcoders.wsgwtp.server.jsonrpc.handler;
 
 import javax.websocket.Session;
 
-import org.codehaus.jackson.JsonNode;
-
 import com.google.inject.Inject;
+import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequest;
 
 /**
  * Build JSONRPCHandler.
@@ -18,12 +17,12 @@ public class JsonRPCHandlerFactory {
     public JsonRPCHandlerFactory() {
     }
 
-    public JsonRPCHandler create(JsonNode jsonNode, Session session) {
-        switch (jsonNode.get("method").asText()) {
+    public JsonRPCHandler create(JsonRPCRequest jsonRPCRequest, Session session) {
+        switch (jsonRPCRequest.getMethod()) {
         case "exec":
-            return new JsonRPCHandlerExec(jsonNode, session);
+            return new JsonRPCHandlerExec(jsonRPCRequest, session);
         case "interrupt":
-            return new JsonRPCHandlerInterrupt(jsonNode, session);
+            return new JsonRPCHandlerInterrupt(jsonRPCRequest, session);
         default:
             return null;
         }

@@ -6,13 +6,12 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Decode serialized JSON received from a client.
  */
-public class JsonRPCRequestDecoder implements Decoder.Text<JsonNode> {
+public class JsonRPCRequestDecoder implements Decoder.Text<JsonRPCRequest> {
 
     @Override
     public void init(EndpointConfig config) {
@@ -25,14 +24,15 @@ public class JsonRPCRequestDecoder implements Decoder.Text<JsonNode> {
     }
 
     @Override
-    public JsonNode decode(String s) throws DecodeException {
+    public JsonRPCRequest decode(String s) throws DecodeException {
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = null;
+        JsonRPCRequest jsonRPCRequest = null;
 
         try {
-            jsonNode = mapper.readTree(s);
+            jsonRPCRequest = mapper.readValue(s, JsonRPCRequest.class);
         } catch (IOException e) {
+            e.printStackTrace();
             /**
              * TODO Handle exceptions according to JSON-RPC 2.0 Specification,
              * e.g. -32700 Parse error Invalid JSON was received by the server.
@@ -40,7 +40,7 @@ public class JsonRPCRequestDecoder implements Decoder.Text<JsonNode> {
              */
         }
 
-        return jsonNode;
+        return jsonRPCRequest;
     }
 
     @Override

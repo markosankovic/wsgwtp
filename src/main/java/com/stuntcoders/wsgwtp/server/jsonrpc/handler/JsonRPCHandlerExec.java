@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import javax.websocket.Session;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequest;
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseBuilder;
 
 /**
@@ -21,8 +21,8 @@ public class JsonRPCHandlerExec extends JsonRPCHandler {
 
     private static Logger logger = Logger.getLogger(JsonRPCHandlerExec.class);
 
-    public JsonRPCHandlerExec(JsonNode jsonNode, Session session) {
-        super(jsonNode, session);
+    public JsonRPCHandlerExec(JsonRPCRequest jsonRPCRequest, Session session) {
+        super(jsonRPCRequest, session);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class JsonRPCHandlerExec extends JsonRPCHandler {
 
         try {
             process = Runtime.getRuntime().exec(
-                    getParams().get("command").getTextValue());
+                    (String) getParams().get("command"));
             process.waitFor();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(

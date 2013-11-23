@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequest;
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCResponseBuilder;
 
 public abstract class JsonRPCHandler implements Runnable {
@@ -18,19 +19,9 @@ public abstract class JsonRPCHandler implements Runnable {
     private static Logger logger = Logger.getLogger(JsonRPCHandler.class);
 
     /**
-     * JSON-RPC request method
+     * JSON-RPC request.
      */
-    private String method;
-
-    /**
-     * JSON-RPC request params.
-     */
-    private JsonNode params;
-
-    /**
-     * JSON-RPC request id.
-     */
-    private String id;
+    private JsonRPCRequest jsonRPCRequest;
 
     /**
      * WebSocket Session.
@@ -40,13 +31,11 @@ public abstract class JsonRPCHandler implements Runnable {
     /**
      * JsonRPCHandler.
      * 
-     * @param jsonNode
+     * @param jsonRPCRequest
      * @param session
      */
-    public JsonRPCHandler(JsonNode jsonNode, Session session) {
-        this.method = jsonNode.get("method").getTextValue();
-        this.params = jsonNode.get("params");
-        this.id = jsonNode.get("id").getTextValue();
+    public JsonRPCHandler(JsonRPCRequest jsonRPCRequest, Session session) {
+        this.jsonRPCRequest = jsonRPCRequest;
         this.session = session;
     }
 
@@ -56,7 +45,7 @@ public abstract class JsonRPCHandler implements Runnable {
      * @return
      */
     public String getMethod() {
-        return method;
+        return jsonRPCRequest.getMethod();
     }
 
     /**
@@ -64,8 +53,8 @@ public abstract class JsonRPCHandler implements Runnable {
      * 
      * @return
      */
-    public JsonNode getParams() {
-        return params;
+    public Map<String, Object> getParams() {
+        return jsonRPCRequest.getParams();
     }
 
     /**
@@ -74,7 +63,7 @@ public abstract class JsonRPCHandler implements Runnable {
      * @return
      */
     public String getId() {
-        return id;
+        return (String) jsonRPCRequest.getId();
     }
 
     /**
@@ -150,7 +139,7 @@ public abstract class JsonRPCHandler implements Runnable {
      * Remove future of this handler from WebSocket session futures.
      */
     public void removeFuture() {
-        getFutures().remove(id);
+        getFutures().remove(getId());
         logger.info("Number of futures for " + session.getId() + " session: "
                 + getFutures().size());
     }
@@ -175,7 +164,7 @@ public abstract class JsonRPCHandler implements Runnable {
      * @return
      */
     public Future<?> putFuture(Future<?> future) {
-        return getFutures().put(id, future);
+        return getFutures().put(getId(), future);
     }
 
     /**
@@ -200,7 +189,7 @@ public abstract class JsonRPCHandler implements Runnable {
 
         sb.append(getClass().getName());
         sb.append(": ");
-        sb.append(id);
+        sb.append(getId());
 
         return sb.toString();
     }

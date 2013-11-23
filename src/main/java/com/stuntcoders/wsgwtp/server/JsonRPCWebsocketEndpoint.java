@@ -13,9 +13,9 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.JsonNode;
 
 import com.google.inject.Inject;
+import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequest;
 import com.stuntcoders.wsgwtp.server.jsonrpc.JsonRPCRequestDecoder;
 import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandler;
 import com.stuntcoders.wsgwtp.server.jsonrpc.handler.JsonRPCHandlerFactory;
@@ -60,10 +60,11 @@ public class JsonRPCWebsocketEndpoint {
     }
 
     @OnMessage
-    public void handleJsonRPCRequest(JsonNode jsonNode, Session session) {
+    public void handleJsonRPCRequest(JsonRPCRequest jsonRPCRequest,
+            Session session) {
         // Build concrete request handler
-        JsonRPCHandler jsonRPCHandler = jsonRPCHandlerFactory.create(jsonNode,
-                session);
+        JsonRPCHandler jsonRPCHandler = jsonRPCHandlerFactory.create(
+                jsonRPCRequest, session);
         logger.info(jsonRPCHandler.toString());
         // Execute request handler
         jsonRPCHandler.putFuture(executorService.submit(jsonRPCHandler
