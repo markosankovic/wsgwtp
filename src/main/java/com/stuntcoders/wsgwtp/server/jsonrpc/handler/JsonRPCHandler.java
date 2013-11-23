@@ -112,7 +112,7 @@ public abstract class JsonRPCHandler implements Runnable {
                     try {
                         ObjectNode response = JsonRPCResponseBuilder.result(
                                 JsonRPCHandler.this.getId(), "jsonrpc-done");
-                        getSession().getBasicRemote().sendText(
+                        getSession().getAsyncRemote().sendText(
                                 JsonRPCResponseBuilder.mapper
                                         .writeValueAsString(response));
                         logger.info("Clean future finally done: "
@@ -176,7 +176,7 @@ public abstract class JsonRPCHandler implements Runnable {
      */
     public void writeResponseAsStringToRemote(JsonNode response) {
         try {
-            session.getBasicRemote().sendText(
+            session.getAsyncRemote().sendText(
                     JsonRPCResponseBuilder.mapper.writeValueAsString(response));
         } catch (IOException e) {
             e.printStackTrace();
