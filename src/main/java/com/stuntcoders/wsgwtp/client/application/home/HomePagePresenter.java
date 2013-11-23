@@ -16,6 +16,8 @@
 
 package com.stuntcoders.wsgwtp.client.application.home;
 
+import java.util.Date;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -33,16 +35,23 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
 import com.stuntcoders.wsgwtp.client.application.home.console.ConsolePresenter;
+import com.stuntcoders.wsgwtp.client.event.WebSocketOnOpenEvent;
+import com.stuntcoders.wsgwtp.client.event.WebSocketOnOpenEvent.WebSocketOnOpenHandler;
+import com.stuntcoders.wsgwtp.client.gin.WebSocketOnCloseEvent;
+import com.stuntcoders.wsgwtp.client.gin.WebSocketOnCloseEvent.WebSocketOnCloseHandler;
 import com.stuntcoders.wsgwtp.client.place.NameTokens;
 
 public class HomePagePresenter extends
         Presenter<HomePagePresenter.MyView, HomePagePresenter.MyProxy>
-        implements HomePageUiHandlers {
+        implements HomePageUiHandlers, WebSocketOnOpenHandler,
+        WebSocketOnCloseHandler {
 
     public interface MyView extends View, HasUiHandlers<HomePageUiHandlers> {
         TextBox getExecuteTextBox();
 
         TabLayoutPanel getTabLayoutPanel();
+
+        void setConnectionLabelText(String text);
     }
 
     IndirectProvider<ConsolePresenter> consolePresenterIndirectProvider;
@@ -62,6 +71,14 @@ public class HomePagePresenter extends
 
         this.consolePresenterIndirectProvider = new StandardProvider<ConsolePresenter>(
                 consolePresenterProvider);
+    }
+
+    @Override
+    public void onBind() {
+        super.onBind();
+
+        addRegisteredHandler(WebSocketOnOpenEvent.getType(), this);
+        addRegisteredHandler(WebSocketOnCloseEvent.getType(), this);
     }
 
     @Override
@@ -93,4 +110,15 @@ public class HomePagePresenter extends
                 });
     }
 
+    @Override
+    public void onWebSocketOnOpen(WebSocketOnOpenEvent event) {
+        getView().setConnectionLabelText(
+                "WebSocket connection OPENED on " + new Date());
+    }
+
+    @Override
+    public void onWebSocketOnClose(WebSocketOnCloseEvent event) {
+        getView().setConnectionLabelText(
+                "WebSocket connection CLOSED on " + new Date());
+    }
 }

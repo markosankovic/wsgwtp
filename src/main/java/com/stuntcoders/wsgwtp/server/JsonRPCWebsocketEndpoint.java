@@ -38,10 +38,12 @@ public class JsonRPCWebsocketEndpoint {
 
     @OnOpen
     public void onOpen(Session session) {
+        logger.info("WebSocket connection is OPENED: " + session.getId());
+
         /**
          * Session will never timeout due to inactivity.
          */
-        session.setMaxIdleTimeout(0);
+        session.setMaxIdleTimeout(-1);
 
         /**
          * Each session has futures (handlers) associated with. All handlers are
@@ -53,6 +55,8 @@ public class JsonRPCWebsocketEndpoint {
 
     @OnClose
     public void onClose(Session session) {
+        logger.info("WebSocket connection is CLOSED: " + session.getId());
+
         /**
          * Cancel all running handlers associated with this session.
          */

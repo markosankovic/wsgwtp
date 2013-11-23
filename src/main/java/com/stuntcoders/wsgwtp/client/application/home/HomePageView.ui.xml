@@ -12,6 +12,9 @@
 			<g:TextBox ui:field="executeTextBox"></g:TextBox>
 			<g:Button ui:field="executeButton" text="Execute"></g:Button>
 		</g:HorizontalPanel>
+		<g:HorizontalPanel>
+			<g:Label ui:field="connectionLabel" text="" />
+		</g:HorizontalPanel>
 		<g:SimplePanel styleName="{style.simplePanel}">
 			<g:TabLayoutPanel barHeight="32" barUnit="PX"
 				height="520PX" ui:field="tabLayoutPanel" />

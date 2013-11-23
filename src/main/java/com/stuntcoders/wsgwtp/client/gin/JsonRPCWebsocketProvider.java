@@ -12,6 +12,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
+import com.stuntcoders.wsgwtp.client.event.WebSocketOnOpenEvent;
 
 public class JsonRPCWebsocketProvider implements Provider<Websocket> {
 
@@ -29,18 +30,20 @@ public class JsonRPCWebsocketProvider implements Provider<Websocket> {
         String websocketBaseURL = GWT.getHostPageBaseURL().replace("http://",
                 "ws://");
 
-        Websocket socket = new Websocket(websocketBaseURL
+        final Websocket websocket = new Websocket(websocketBaseURL
                 + "/JsonRPCWebsocketEndpoint");
 
-        socket.addListener(new WebsocketListener() {
+        websocket.addListener(new WebsocketListener() {
 
             @Override
             public void onClose() {
                 logger.info("WebSocket connection closed on: " + new Date());
+                eventBus.fireEvent(new WebSocketOnCloseEvent(websocket));
             }
 
             @Override
             public void onMessage(String msg) {
+                logger.info("WebSocket message received: " + msg);
                 eventBus.fireEvent(new JsonRPCResponseEvent(
                         (JSONObject) JSONParser.parseLenient(msg)));
             }
@@ -48,11 +51,12 @@ public class JsonRPCWebsocketProvider implements Provider<Websocket> {
             @Override
             public void onOpen() {
                 logger.info("WebSocket connection opened on: " + new Date());
+                eventBus.fireEvent(new WebSocketOnOpenEvent(websocket));
             }
         });
 
-        socket.open();
+        websocket.open();
 
-        return socket;
+        return websocket;
     }
 }
