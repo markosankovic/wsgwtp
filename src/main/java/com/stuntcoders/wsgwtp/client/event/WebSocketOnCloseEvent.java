@@ -1,4 +1,4 @@
-package com.stuntcoders.wsgwtp.client.gin;
+package com.stuntcoders.wsgwtp.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.EventHandler;

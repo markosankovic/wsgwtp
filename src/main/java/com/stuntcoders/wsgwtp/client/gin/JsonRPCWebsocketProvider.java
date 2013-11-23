@@ -12,6 +12,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
 import com.stuntcoders.wsgwtp.client.event.JsonRPCResponseEvent;
+import com.stuntcoders.wsgwtp.client.event.WebSocketOnCloseEvent;
 import com.stuntcoders.wsgwtp.client.event.WebSocketOnOpenEvent;
 import com.stuntcoders.wsgwtp.client.jsonrpc.JsonRPCResponse;
 

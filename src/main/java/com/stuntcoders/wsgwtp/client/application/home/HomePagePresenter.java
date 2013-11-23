@@ -35,10 +35,10 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.stuntcoders.wsgwtp.client.application.ApplicationPresenter;
 import com.stuntcoders.wsgwtp.client.application.home.console.ConsolePresenter;
+import com.stuntcoders.wsgwtp.client.event.WebSocketOnCloseEvent;
 import com.stuntcoders.wsgwtp.client.event.WebSocketOnOpenEvent;
+import com.stuntcoders.wsgwtp.client.event.WebSocketOnCloseEvent.WebSocketOnCloseHandler;
 import com.stuntcoders.wsgwtp.client.event.WebSocketOnOpenEvent.WebSocketOnOpenHandler;
-import com.stuntcoders.wsgwtp.client.gin.WebSocketOnCloseEvent;
-import com.stuntcoders.wsgwtp.client.gin.WebSocketOnCloseEvent.WebSocketOnCloseHandler;
 import com.stuntcoders.wsgwtp.client.place.NameTokens;
 
 public class HomePagePresenter extends
