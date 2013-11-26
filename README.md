@@ -91,7 +91,7 @@ Response frames example:
 
 Notice that server responds with the same frame identifier: ```K468Hw7kZHsE6ncPLEm0OuiB0iGPetzE5jxmZnyz```.
 
-Handling JSON-RPC Request {#json-rpc-request}
+Handling JSON-RPC Request
 -------------------------
 
 Client sends serialized request through previously opened WebSocket connection:
