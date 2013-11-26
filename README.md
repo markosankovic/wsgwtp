@@ -1,7 +1,7 @@
 GWTP WebSocket JSON-RPC Communication Example
 =============================================
 
-This project demonstrates part of the solution StuntCoders have used during development of web-based IDE for one of their client. From within the IDE users can initiate build and run simulation process. Simulation can run infinitely and during the execution its output is pushed back to a client over WebSocket.
+This project demonstrates part of the solution [StuntCoders](http://stuntcoders.com/) have used during development of web-based IDE for one of their client. From within the IDE users can initiate build and run simulation process. Simulation can run infinitely and during the execution its output is pushed back to a client over WebSocket.
 
 We had already tried [Atmosphere](https://github.com/Atmosphere/atmosphere), but found it rather complex and not really fitting our needs. You can find the working example of GWTP with Atmosphere [here](https://github.com/sankovicmarko/gwtp-atmosphere-demo).
 
